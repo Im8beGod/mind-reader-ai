@@ -120,33 +120,33 @@ probabilities = {
 # ---------------- QUESTION SELECTION ----------------
 
 def best_question(scores, asked):
-best_q = None
-best_score = -1
+    best_q = None
+    best_score = -1
 
-```
-for q in questions:
-    if q in asked:
-        continue
+    for q in questions:
+        if q in asked:
+            continue
 
-    vals = [probabilities[p][q] for p in scores]
-    mean = sum(vals)/len(vals)
-    var = sum((v-mean)**2 for v in vals)
+        vals = [probabilities[p][q] for p in scores]
+        mean = sum(vals) / len(vals)
+        var = sum((v - mean) ** 2 for v in vals)
 
-    score = var * question_weights[q]
+        score = var * question_weights[q]
 
-    if score > best_score:
-        best_score = score
-        best_q = q
+        if score > best_score:
+            best_score = score
+            best_q = q
 
-return best_q
-```
+    return best_q
+
 
 # ---------------- SESSION ----------------
 
 if "scores" not in st.session_state:
-st.session_state.scores = {p:1.0 for p in probabilities}
-st.session_state.asked = []
-st.session_state.count = 0
+    st.session_state.scores = {p: 1.0 for p in probabilities}
+    st.session_state.asked = []
+    st.session_state.count = 0
+
 
 # ---------------- UI ----------------
 
@@ -155,38 +155,43 @@ st.title("🧠 Mind Reader 😈")
 q = best_question(st.session_state.scores, st.session_state.asked)
 
 if q:
-st.subheader(questions[q])
+    st.subheader(questions[q])
 
-```
-cols = st.columns(5)
-options = ["HY","Y","M","N","HN"]
+    cols = st.columns(5)
+    options = ["HY", "Y", "M", "N", "HN"]
 
-for i, opt in enumerate(options):
-    if cols[i].button(opt):
+    for i, opt in enumerate(options):
+        if cols[i].button(opt):
 
-        user_val = val(opt)
+            user_val = val(opt)
 
-        for p in st.session_state.scores:
-            weight = question_weights[q]
-            sim = (1 - abs(probabilities[p][q] - user_val)) ** weight
+            for p in st.session_state.scores:
+                weight = question_weights[q]
+                sim = (1 - abs(probabilities[p][q] - user_val)) ** weight
 
-            # slight randomness
-            sim += random.uniform(-0.02, 0.02)
+                # slight randomness
+                sim += random.uniform(-0.02, 0.02)
 
-            st.session_state.scores[p] *= sim
+                st.session_state.scores[p] *= sim
 
-        # normalize
-        total = sum(st.session_state.scores.values())
-        for p in st.session_state.scores:
-            st.session_state.scores[p] /= total
+            # normalize
+            total = sum(st.session_state.scores.values())
+            for p in st.session_state.scores:
+                st.session_state.scores[p] /= total
 
-        st.session_state.asked.append(q)
-        st.session_state.count += 1
+            st.session_state.asked.append(q)
+            st.session_state.count += 1
 
-        sorted_p = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
+            sorted_p = sorted(
+                st.session_state.scores.items(),
+                key=lambda x: x[1],
+                reverse=True
+            )
 
-        if len(sorted_p) > 1 and (sorted_p[0][1] - sorted_p[1][1] > 0.25 or st.session_state.count >= 12):
-            st.success(f"😈 I KNOW IT... It's {sorted_p[0][0]}")
-        else:
-            st.rerun()
-```
+            if len(sorted_p) > 1 and (
+                sorted_p[0][1] - sorted_p[1][1] > 0.25
+                or st.session_state.count >= 12
+            ):
+                st.success(f"😈 I KNOW IT... It's {sorted_p[0][0]}")
+            else:
+                st.rerun()
