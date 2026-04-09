@@ -4,13 +4,13 @@ import random
 # ---------------- VALUE MAPPING ----------------
 
 def val(x):
-return {
-"HY": 0.95,
-"Y": 0.75,
-"M": 0.6,   # improved from 0.5
-"N": 0.25,
-"HN": 0.05
-}[x]
+    return {
+        "HY": 0.95,
+        "Y": 0.75,
+        "M": 0.6,   # improved from 0.5
+        "N": 0.25,
+        "HN": 0.05
+    }[x]
 
 # ---------------- QUESTIONS ----------------
 
