@@ -132,7 +132,11 @@ if "scores" not in st.session_state:
 
 # ---------------- UI ----------------
 st.title("🧠 Mind Reader 😈")
-
+if st.button("🔄 Start New Game"):
+    st.session_state.scores = {p:1.0 for p in probabilities}
+    st.session_state.asked = []
+    st.session_state.count = 0
+    st.rerun()
 q = best_question(st.session_state.scores, st.session_state.asked)
 
 if q:
