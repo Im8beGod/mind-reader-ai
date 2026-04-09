@@ -130,34 +130,75 @@ if "scores" not in st.session_state:
     st.session_state.asked = []
     st.session_state.count = 0
 
-# ---------------- UI ----------------
-st.title("🧠 Mind Reader 😈")
+import time
+
+# ---------------- STYLING ----------------
+st.markdown("""
+<style>
+body {
+    background-color: #0f172a;
+    color: white;
+}
+.stApp {
+    background: linear-gradient(135deg, #020617, #0f172a);
+}
+h1 {
+    text-align: center;
+    font-size: 40px !important;
+    color: #38bdf8;
+}
+.question-box {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 22px;
+    box-shadow: 0px 0px 20px rgba(56,189,248,0.4);
+}
+.result-box {
+    background: #020617;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 20px rgba(16,185,129,0.5);
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------- TITLE ----------------
+st.markdown("<h1>🧠 Mind Reader AI 😈</h1>", unsafe_allow_html=True)
+
+# ---------------- RESET BUTTON ----------------
 if st.button("🔄 Start New Game"):
     st.session_state.scores = {p:1.0 for p in probabilities}
     st.session_state.asked = []
     st.session_state.count = 0
     st.rerun()
+
+# ---------------- QUESTION ----------------
 q = best_question(st.session_state.scores, st.session_state.asked)
 
 if q:
-    st.subheader(questions[q])
+    st.markdown(f'<div class="question-box">{questions[q]}</div>', unsafe_allow_html=True)
+
+    st.write("")
 
     cols = st.columns(5)
     options = ["HY","Y","M","N","HN"]
+    labels = ["🔥 Hell Yeah", "👍 Yes", "🤔 Maybe", "👎 No", "💀 Hell No"]
 
     for i, opt in enumerate(options):
-        if cols[i].button(opt):
+        if cols[i].button(labels[i]):
 
             user_val = val(opt)
+
+            # ---------------- FAKE THINKING ----------------
+            with st.spinner("🧠 Reading your mind..."):
+                time.sleep(1.2)
 
             for p in st.session_state.scores:
                 weight = question_weights[q]
                 sim = (1 - abs(probabilities[p][q] - user_val)) ** weight
-
-                # smoothing (VERY IMPORTANT)
                 sim = 0.7 * sim + 0.3
-
-                # slight randomness
                 sim += random.uniform(-0.02, 0.02)
 
                 st.session_state.scores[p] *= sim
@@ -170,15 +211,37 @@ if q:
             st.session_state.asked.append(q)
             st.session_state.count += 1
 
-            sorted_p = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
+            sorted_p = sorted(
+                st.session_state.scores.items(),
+                key=lambda x: x[1],
+                reverse=True
+            )
 
-            # 🔥 SHOW TOP 3
-            st.write("🤔 Top guesses:")
+            # ---------------- TOP 3 ----------------
+            st.markdown("<div class='result-box'>", unsafe_allow_html=True)
+            st.write("🤔 **Let me think... Top suspects:**")
+
             for name, prob in sorted_p[:3]:
-                st.write(f"{name} → {round(prob*100,2)}%")
+                st.write(f"👉 {name} — {round(prob*100,2)}%")
 
-            # 🔥 BETTER GUESS CONDITION
+            st.markdown("</div>", unsafe_allow_html=True)
+
+            # ---------------- FINAL GUESS ----------------
             if sorted_p[0][1] > 0.6 and st.session_state.count >= 8:
-                st.success(f"😈 I KNOW IT... It's {sorted_p[0][0]}")
+
+                st.markdown("## 💀 I KNOW WHO YOU'RE THINKING OF...")
+
+                time.sleep(1)
+
+                st.success(f"😈 It's **{sorted_p[0][0]}**")
+
+                st.balloons()
+
+                if st.button("Play Again 🔁"):
+                    st.session_state.scores = {p:1.0 for p in probabilities}
+                    st.session_state.asked = []
+                    st.session_state.count = 0
+                    st.rerun()
+
             else:
                 st.rerun()
