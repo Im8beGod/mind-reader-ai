@@ -2,78 +2,64 @@ import streamlit as st
 import random
 
 # ---------------- VALUE MAPPING ----------------
-
 def val(x):
     return {
         "HY": 0.95,
         "Y": 0.75,
-        "M": 0.6,   # improved from 0.5
+        "M": 0.6,
         "N": 0.25,
         "HN": 0.05
     }[x]
 
 # ---------------- QUESTIONS ----------------
-
 questions = {
-1:"Do they survive exams purely on luck and vibes?",
-2:"Are they very chaotic and disorganised?",
-3:"Are they likely to have tribal origins?",
-4:"Do they send reels/memes very aggressively?",
-5:"Is the person likely to scream when a dog appears?",
-6:"Do they have to LOOK UP to speak to everyone?",
-7:"Do they hide their forehead with their hair?",
-8:"Do they take their phone to exam hall?",
-9:"Do they talk a lot of nonsense?",
-10:"Are they likely to do 'Kaala Jaadu' if you offend them?",
-11:"Have they had 'Lafda' with faculties?",
-12:"Do they look like The Burj Khalifa?",
-13:"Are they likely to disappear if the lights are turned off?",
-14:"Would people avoid eye contact with this person?",
-15:"Do they look like they use Surf excel as facewash?",
-16:"Are they a great politician?",
-17:"Does it seem they have their lips stapled?",
-18:"Can they make a ponytail out of their hair?",
-19:"Do they look like they have not slept in a few days?",
-20:"Do they have enough space on their head to project a movie?",
-21:"Does their hairline look like it's slowly moving away from its responsibilities?",
-22:"Do they talk like they have no mute button?",
-23:"Do you need subtitles to understand what they are saying?",
-24:"Do they talk so little that even their 'Hmmm' feels like overtime work?",
-25:"Do they look like a toothpick?",
-26:"Does your person have the personality of a brick wall?",
-27:"Do they seem allergic to small talk?",
-28:"Can they be considered as brand ambassador of SM (SM paglu)?",
-29:"Do they fall in the category of Nibba/Nibbi?",
-30:"Do they think they are very smart but compete with PsyDuck in terms of smartness?",
-31:"Does the person do something very unique?",
-32:"Do they possess in-built bottle opener?",
-33:"Do they secretly hate 'Hindi'?",
-34:"Are they likely to drink and drive?",
-35:"Are they likely to crash their vehicle on a roadtrip?",
-36:"Are they real-life NPC?",
-37:"Are they likely to be found studying even on their wedding day?",
-38:"Will you assume them to be a Taylor Swift fan?",
-39:"Will your person be a good 'Mazdoor'?",
-40:"Can this person waste an entire day doing absolutely nothing and still sleep peacefully?"
+    1:"Do they survive exams purely on luck and vibes?",
+    2:"Are they very chaotic and disorganised?",
+    3:"Are they likely to have tribal origins?",
+    4:"Do they send reels/memes very aggressively?",
+    5:"Is the person likely to scream when a dog appears?",
+    6:"Do they have to LOOK UP to speak to everyone?",
+    7:"Do they hide their forehead with their hair?",
+    8:"Do they take their phone to exam hall?",
+    9:"Do they talk a lot of nonsense?",
+    10:"Are they likely to do 'Kaala Jaadu' if you offend them?",
+    11:"Have they had 'Lafda' with faculties?",
+    12:"Do they look like The Burj Khalifa?",
+    13:"Are they likely to disappear if the lights are turned off?",
+    14:"Would people avoid eye contact with this person?",
+    15:"Do they look like they use Surf excel as facewash?",
+    16:"Are they a great politician?",
+    17:"Does it seem they have their lips stapled?",
+    18:"Can they make a ponytail out of their hair?",
+    19:"Do they look like they have not slept in a few days?",
+    20:"Do they have enough space on their head to project a movie?",
+    21:"Does their hairline look like it's slowly moving away from its responsibilities?",
+    22:"Do they talk like they have no mute button?",
+    23:"Do you need subtitles to understand what they are saying?",
+    24:"Do they talk so little that even their 'Hmmm' feels like overtime work?",
+    25:"Do they look like a toothpick?",
+    26:"Does your person have the personality of a brick wall?",
+    27:"Do they seem allergic to small talk?",
+    28:"Can they be considered as brand ambassador of SM (SM paglu)?",
+    29:"Do they fall in the category of Nibba/Nibbi?",
+    30:"Do they think they are very smart but compete with PsyDuck in terms of smartness?",
+    31:"Does the person do something very unique?",
+    32:"Do they possess in-built bottle opener?",
+    33:"Do they secretly hate 'Hindi'?",
+    34:"Are they likely to drink and drive?",
+    35:"Are they likely to crash their vehicle on a roadtrip?",
+    36:"Are they real-life NPC?",
+    37:"Are they likely to be found studying even on their wedding day?",
+    38:"Will you assume them to be a Taylor Swift fan?",
+    39:"Will your person be a good 'Mazdoor'?",
+    40:"Can this person waste an entire day doing absolutely nothing and still sleep peacefully?"
 }
 
 # ---------------- QUESTION WEIGHTS ----------------
-
-question_weights = {
-1:1.2,2:1.5,3:1.8,4:1.2,5:1.0,
-6:1.5,7:1.8,8:1.3,9:1.4,10:1.6,
-11:1.4,12:1.6,13:1.8,14:1.5,15:1.3,
-16:1.4,17:1.6,18:1.5,19:1.4,20:1.8,
-21:1.8,22:1.5,23:1.3,24:1.6,25:1.5,
-26:1.6,27:1.5,28:1.7,29:1.6,30:1.5,
-31:1.7,32:1.4,33:1.3,34:1.2,35:1.3,
-36:1.6,37:1.5,38:1.2,39:1.4,40:1.3
-}
+question_weights = {i:1.5 for i in questions}
 
 # ---------------- DATASET ----------------
-
-# ⚠️ KEEP ADDING YOUR FULL DATASET HERE
-
+# 👉 PASTE YOUR FULL DATASET HERE
 probabilities = {
 "Nilesh": {1:0.25,2:0.75,3:0.6,4:0.25,5:0.05,6:0.25,7:0.95,8:0.25,9:0.75,10:0.95,11:0.75,12:0.6,13:0.95,14:0.25,15:0.25,16:0.75,17:0.25,18:0.25,19:0.6,20:0.95,21:0.95,22:0.75,23:0.25,24:0.25,25:0.05,26:0.25,27:0.75,28:0.75,29:0.25,30:0.6,31:0.75,32:0.25,33:0.25,34:0.25,35:0.95,36:0.05,37:0.25,38:0.25,39:0.25,40:0.75},
 
@@ -118,7 +104,6 @@ probabilities = {
 }
 
 # ---------------- QUESTION SELECTION ----------------
-
 def best_question(scores, asked):
     best_q = None
     best_score = -1
@@ -128,8 +113,8 @@ def best_question(scores, asked):
             continue
 
         vals = [probabilities[p][q] for p in scores]
-        mean = sum(vals) / len(vals)
-        var = sum((v - mean) ** 2 for v in vals)
+        mean = sum(vals)/len(vals)
+        var = sum((v-mean)**2 for v in vals)
 
         score = var * question_weights[q]
 
@@ -139,17 +124,13 @@ def best_question(scores, asked):
 
     return best_q
 
-
 # ---------------- SESSION ----------------
-
 if "scores" not in st.session_state:
-    st.session_state.scores = {p: 1.0 for p in probabilities}
+    st.session_state.scores = {p:1.0 for p in probabilities}
     st.session_state.asked = []
     st.session_state.count = 0
 
-
 # ---------------- UI ----------------
-
 st.title("🧠 Mind Reader 😈")
 
 q = best_question(st.session_state.scores, st.session_state.asked)
@@ -158,7 +139,7 @@ if q:
     st.subheader(questions[q])
 
     cols = st.columns(5)
-    options = ["HY", "Y", "M", "N", "HN"]
+    options = ["HY","Y","M","N","HN"]
 
     for i, opt in enumerate(options):
         if cols[i].button(opt):
@@ -168,6 +149,9 @@ if q:
             for p in st.session_state.scores:
                 weight = question_weights[q]
                 sim = (1 - abs(probabilities[p][q] - user_val)) ** weight
+
+                # smoothing (VERY IMPORTANT)
+                sim = 0.7 * sim + 0.3
 
                 # slight randomness
                 sim += random.uniform(-0.02, 0.02)
@@ -182,16 +166,15 @@ if q:
             st.session_state.asked.append(q)
             st.session_state.count += 1
 
-            sorted_p = sorted(
-                st.session_state.scores.items(),
-                key=lambda x: x[1],
-                reverse=True
-            )
+            sorted_p = sorted(st.session_state.scores.items(), key=lambda x: x[1], reverse=True)
 
-            if len(sorted_p) > 1 and (
-                sorted_p[0][1] - sorted_p[1][1] > 0.25
-                or st.session_state.count >= 12
-            ):
+            # 🔥 SHOW TOP 3
+            st.write("🤔 Top guesses:")
+            for name, prob in sorted_p[:3]:
+                st.write(f"{name} → {round(prob*100,2)}%")
+
+            # 🔥 BETTER GUESS CONDITION
+            if sorted_p[0][1] > 0.6 and st.session_state.count >= 8:
                 st.success(f"😈 I KNOW IT... It's {sorted_p[0][0]}")
             else:
                 st.rerun()
